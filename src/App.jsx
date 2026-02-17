@@ -64,7 +64,7 @@ function App() {
         </p>
         <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
           <a href="https://github.com" style={{ color: theme.accent, textDecoration: 'none' }}>GitHub</a>
-          <a href="https://linkedin.com" style={{ color: theme.accent, textDecoration: 'none' }}>LinkedIn</a>
+          <a href="https://www.linkedin.com/in/michael-c-jackson01/" style={{ color: theme.accent, textDecoration: 'none' }}>LinkedIn</a>
           <a href="mailto:mike@themikejackson.com" style={{ color: theme.accent, textDecoration: 'none' }}>Email</a>
         </div>
       </section>
