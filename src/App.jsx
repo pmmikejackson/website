@@ -2,6 +2,7 @@ import { useState } from 'react'
 
 function App() {
   const [darkMode, setDarkMode] = useState(true)
+  const [showLinkedIn, setShowLinkedIn] = useState(false)
 
   const theme = {
     bg: darkMode ? '#0a0a0a' : '#fafafa',
@@ -64,7 +65,10 @@ function App() {
         </p>
         <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
           <a href="https://github.com" style={{ color: theme.accent, textDecoration: 'none' }}>GitHub</a>
-          <a href="https://www.linkedin.com/in/michael-c-jackson01/" style={{ color: theme.accent, textDecoration: 'none' }}>LinkedIn</a>
+          <button
+            onClick={() => setShowLinkedIn(true)}
+            style={{ background: 'none', border: 'none', color: theme.accent, textDecoration: 'none', cursor: 'pointer', padding: 0, fontSize: 'inherit' }}
+          >LinkedIn</button>
           <a href="mailto:mike@themikejackson.com" style={{ color: theme.accent, textDecoration: 'none' }}>Email</a>
         </div>
       </section>
@@ -96,6 +100,61 @@ function App() {
           ))}
         </div>
       </section>
+
+      {/* LinkedIn popup */}
+      {showLinkedIn && (
+        <div
+          onClick={() => setShowLinkedIn(false)}
+          style={{
+            position: 'fixed', inset: 0,
+            background: 'rgba(0,0,0,0.6)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            zIndex: 100,
+          }}
+        >
+          <div
+            onClick={e => e.stopPropagation()}
+            style={{
+              background: theme.cardBg,
+              border: `1px solid ${theme.border}`,
+              borderRadius: '12px',
+              padding: '2rem',
+              maxWidth: '340px',
+              width: '90%',
+              textAlign: 'center',
+            }}
+          >
+            <p style={{ marginBottom: '1.5rem', fontSize: '1rem' }}>Connect with me on LinkedIn</p>
+            <div style={{ display: 'flex', gap: '0.75rem', justifyContent: 'center' }}>
+              <a
+                href="https://www.linkedin.com/in/michael-c-jackson01/"
+                target="_blank"
+                rel="noreferrer"
+                style={{
+                  background: theme.accent,
+                  color: '#fff',
+                  padding: '0.5rem 1.25rem',
+                  borderRadius: '6px',
+                  textDecoration: 'none',
+                  fontSize: '0.9rem',
+                }}
+              >Open LinkedIn</a>
+              <button
+                onClick={() => setShowLinkedIn(false)}
+                style={{
+                  background: 'none',
+                  border: `1px solid ${theme.border}`,
+                  color: theme.text,
+                  padding: '0.5rem 1.25rem',
+                  borderRadius: '6px',
+                  cursor: 'pointer',
+                  fontSize: '0.9rem',
+                }}
+              >Cancel</button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Footer */}
       <footer style={{
