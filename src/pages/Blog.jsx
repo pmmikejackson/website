@@ -11,6 +11,7 @@ export default function Blog({ theme }) {
   useEffect(() => {
     setLoading(true)
     setError(null)
+    setData(null)
     const fetchData = slug ? getPost(slug) : getPosts()
     fetchData
       .then(setData)
