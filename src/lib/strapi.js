@@ -13,16 +13,16 @@ export function getStrapiMedia(url) {
 }
 
 export async function getPosts() {
-  const data = await fetchAPI('/articles?sort=publishedAt:desc&populate=*')
+  const data = await fetchAPI('/blog-posts?sort=PublishedDate:desc&populate=*')
   return data.data ?? []
 }
 
 export async function getPost(slug) {
-  const data = await fetchAPI(`/articles?filters[slug][$eq]=${slug}&populate=*`)
+  const data = await fetchAPI(`/blog-posts?filters[slug][$eq]=${slug}&populate=*`)
   return data.data?.[0] ?? null
 }
 
 export async function getTeamMembers() {
-  const data = await fetchAPI('/team-members?sort=order:asc&populate=*')
+  const data = await fetchAPI('/team-members?populate=*')
   return data.data ?? []
 }
