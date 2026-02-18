@@ -18,7 +18,7 @@ export async function getPosts() {
 }
 
 export async function getPost(slug) {
-  const data = await fetchAPI(`/blog-posts?filters[slug][$eq]=${slug}&populate=*`)
+  const data = await fetchAPI(`/blog-posts?filters[Slug][$eq]=${slug}&populate=*`)
   return data.data?.[0] ?? null
 }
 
