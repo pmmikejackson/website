@@ -22,6 +22,16 @@ export async function getPost(slug) {
   return data.data?.[0] ?? null
 }
 
+export async function getPages() {
+  const data = await fetchAPI('/pages?populate=*')
+  return data.data ?? []
+}
+
+export async function getPage(slug) {
+  const data = await fetchAPI(`/pages?filters[Slug][$eq]=${slug}&populate=*`)
+  return data.data?.[0] ?? null
+}
+
 export async function getTeamMembers() {
   const data = await fetchAPI('/team-members?populate=*')
   return data.data ?? []

@@ -4,6 +4,7 @@ import Nav from './components/Nav'
 import Home from './pages/Home'
 import Blog from './pages/Blog'
 import Team from './pages/Team'
+import Page from './pages/Page'
 
 function App() {
   const [darkMode, setDarkMode] = useState(true)
@@ -33,6 +34,7 @@ function App() {
           <Route path="/blog" element={<Blog theme={theme} />} />
           <Route path="/blog/:slug" element={<Blog theme={theme} />} />
           <Route path="/team" element={<Team theme={theme} />} />
+          <Route path="/pages/:slug" element={<Page theme={theme} />} />
         </Routes>
 
         <footer style={{
