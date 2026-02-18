@@ -76,9 +76,9 @@ export default function Blog({ theme }) {
   return (
     <div style={containerStyle}>
       <h1 style={{ fontSize: '2rem', marginBottom: '2rem' }}>Blog</h1>
-      {(!data || data.length === 0) && <p style={{ color: theme.muted }}>No posts yet.</p>}
+      {(!Array.isArray(data) || data.length === 0) && <p style={{ color: theme.muted }}>No posts yet.</p>}
       <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-        {data && data.map((post) => (
+        {Array.isArray(data) && data.map((post) => (
           <Link key={post.id} to={`/blog/${post.Slug}`} style={{ textDecoration: 'none' }}>
             <div style={{
               background: theme.cardBg,
