@@ -1,17 +1,33 @@
 import { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
-import { getPages, getStrapiMedia } from '../lib/strapi'
+import { getCarouselItems, getHomepageSettings, getLocations } from '../lib/strapi'
+import Carousel3D from '../components/Carousel3D'
+import Globe from '../components/Globe'
 
 export default function Home({ theme }) {
   const [activeModal, setActiveModal] = useState(null)
-  const [pages, setPages] = useState([])
+  const [carouselItems, setCarouselItems] = useState([])
+  const [carouselSpeed, setCarouselSpeed] = useState(undefined)
+  const [globeSpeed, setGlobeSpeed] = useState(undefined)
+  const [allLocations, setAllLocations] = useState([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    getPages()
-      .then(setPages)
-      .catch(() => setPages([]))
-      .finally(() => setLoading(false))
+    Promise.all([
+      getCarouselItems().catch(() => []),
+      getHomepageSettings().catch(() => ({})),
+      getLocations().catch(() => []),
+    ]).then(([items, settings, locations]) => {
+      setCarouselItems(items)
+      if (settings.CarouselSpeed) setCarouselSpeed(settings.CarouselSpeed)
+      if (settings.GlobeSpeed) setGlobeSpeed(settings.GlobeSpeed)
+
+      const locs = [
+        ...locations.map(l => ({ lat: l.Latitude, lng: l.Longitude, name: l.Name })),
+        ...items.filter(i => i.Latitude && i.Longitude)
+          .map(i => ({ lat: i.Latitude, lng: i.Longitude, name: i.Title })),
+      ]
+      setAllLocations(locs)
+    }).finally(() => setLoading(false))
   }, [])
 
   return (
@@ -35,45 +51,15 @@ export default function Home({ theme }) {
         </div>
       </section>
 
-      {/* Pages */}
-      <section style={{ maxWidth: '900px', margin: '0 auto', padding: '2rem' }}>
-        <h2 style={{ fontSize: '1.5rem', marginBottom: '1.5rem' }}>Pages</h2>
-        {loading && <p style={{ color: theme.muted }}>Loading...</p>}
-        {!loading && pages.length === 0 && <p style={{ color: theme.muted }}>No pages yet.</p>}
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fill, 190px)',
-          gap: '1rem',
-          justifyContent: 'center',
-        }}>
-          {pages.map((page) => {
-            const heroUrl = page.HeroImage?.url ? getStrapiMedia(page.HeroImage.url) : null
-            return (
-              <Link key={page.id} to={`/pages/${page.Slug}`} style={{ textDecoration: 'none', color: 'inherit' }}>
-                <div style={{
-                  background: theme.cardBg,
-                  border: `1px solid ${theme.border}`,
-                  borderRadius: '8px',
-                  overflow: 'hidden',
-                  transition: 'all 0.3s ease',
-                  width: '190px',
-                }}>
-                  {heroUrl && (
-                    <img
-                      src={heroUrl}
-                      alt={page.Title}
-                      style={{ width: '100%', aspectRatio: '1/1', objectFit: 'cover', display: 'block' }}
-                    />
-                  )}
-                  <div style={{ padding: '0.75rem' }}>
-                    <h3 style={{ fontSize: '0.9rem', margin: 0 }}>{page.Title}</h3>
-                  </div>
-                </div>
-              </Link>
-            )
-          })}
-        </div>
-      </section>
+      {/* Carousel */}
+      {!loading && carouselItems.length >= 3 && (
+        <Carousel3D items={carouselItems} theme={theme} speed={carouselSpeed} />
+      )}
+
+      {/* Globe */}
+      {!loading && allLocations.length > 0 && (
+        <Globe locations={allLocations} speed={globeSpeed} />
+      )}
 
       {/* External link popup */}
       {activeModal && (() => {

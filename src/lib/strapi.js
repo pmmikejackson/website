@@ -36,3 +36,25 @@ export async function getTeamMembers() {
   const data = await fetchAPI('/team-members?populate=*')
   return data.data ?? []
 }
+
+export async function getHomepageSettings() {
+  const data = await fetchAPI('/homepage')
+  return data.data ?? {}
+}
+
+export async function getLocations() {
+  const data = await fetchAPI('/locations?populate=*')
+  return data.data ?? []
+}
+
+export async function getCarouselItems() {
+  const data = await fetchAPI('/event-posters?populate=*')
+  const now = new Date()
+  return (data.data ?? []).filter(item => {
+    const start = item.StartDate ? new Date(item.StartDate) : null
+    const end = item.EndDate ? new Date(item.EndDate) : null
+    if (start && now < start) return false
+    if (end && now > end) return false
+    return true
+  })
+}
