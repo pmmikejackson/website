@@ -1,10 +1,11 @@
 import { useState } from 'react'
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Link } from 'react-router-dom'
 import Nav from './components/Nav'
 import Home from './pages/Home'
 import Blog from './pages/Blog'
 import Team from './pages/Team'
 import Page from './pages/Page'
+import { containerStyle } from './lib/styles'
 
 function App() {
   const [darkMode, setDarkMode] = useState(true)
@@ -25,7 +26,7 @@ function App() {
         background: theme.bg,
         color: theme.text,
         minHeight: '100vh',
-        transition: 'all 0.3s ease',
+        transition: 'background 0.3s ease, color 0.3s ease',
       }}>
         <Nav theme={theme} darkMode={darkMode} setDarkMode={setDarkMode} />
 
@@ -35,11 +36,16 @@ function App() {
           <Route path="/blog/:slug" element={<Blog theme={theme} />} />
           <Route path="/team" element={<Team theme={theme} />} />
           <Route path="/pages/:slug" element={<Page theme={theme} />} />
+          <Route path="*" element={
+            <div style={{ ...containerStyle, textAlign: 'center', paddingTop: '4rem' }}>
+              <h1 style={{ fontSize: '2rem', marginBottom: '1rem' }}>Page not found</h1>
+              <Link to="/" style={{ color: theme.accent, textDecoration: 'none' }}>Back to Home</Link>
+            </div>
+          } />
         </Routes>
 
         <footer style={{
-          maxWidth: '900px',
-          margin: '0 auto',
+          ...containerStyle,
           padding: '3rem 2rem',
           textAlign: 'center',
           color: theme.muted,

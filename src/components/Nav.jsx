@@ -27,6 +27,7 @@ export default function Nav({ theme, darkMode, setDarkMode }) {
       </div>
       <button
         onClick={() => setDarkMode(!darkMode)}
+        aria-label={darkMode ? 'Switch to light mode' : 'Switch to dark mode'}
         style={{
           background: 'none',
           border: `1px solid ${theme.border}`,

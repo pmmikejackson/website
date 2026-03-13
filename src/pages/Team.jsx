@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { getTeamMembers, getStrapiMedia } from '../lib/strapi'
+import { containerStyle } from '../lib/styles'
 
 export default function Team({ theme }) {
   const [members, setMembers] = useState([])
@@ -13,7 +14,6 @@ export default function Team({ theme }) {
       .finally(() => setLoading(false))
   }, [])
 
-  const containerStyle = { maxWidth: '900px', margin: '0 auto', padding: '2rem' }
   const mutedStyle = { color: theme.muted, fontSize: '0.9rem' }
 
   if (loading) return (
