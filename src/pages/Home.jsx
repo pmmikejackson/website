@@ -1,5 +1,6 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import { getCarouselItems, getHomepageSettings, getLocations } from '../lib/strapi'
+import { linkButtonStyle } from '../lib/styles'
 import Carousel3D from '../components/Carousel3D'
 import Globe from '../components/Globe'
 
@@ -41,11 +42,11 @@ export default function Home({ theme }) {
         <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
           <button
             onClick={() => setActiveModal('github')}
-            style={{ background: 'none', border: 'none', color: theme.accent, textDecoration: 'none', cursor: 'pointer', padding: 0, fontSize: 'inherit' }}
+            style={linkButtonStyle(theme.accent)}
           >GitHub</button>
           <button
             onClick={() => setActiveModal('linkedin')}
-            style={{ background: 'none', border: 'none', color: theme.accent, textDecoration: 'none', cursor: 'pointer', padding: 0, fontSize: 'inherit' }}
+            style={linkButtonStyle(theme.accent)}
           >LinkedIn</button>
           <a href="mailto:mike@themikejackson.com" style={{ color: theme.accent, textDecoration: 'none' }}>Email</a>
         </div>
@@ -62,67 +63,83 @@ export default function Home({ theme }) {
       )}
 
       {/* External link popup */}
-      {activeModal && (() => {
-        const modals = {
-          github: { label: 'GitHub', url: 'https://github.com' },
-          linkedin: { label: 'LinkedIn', url: 'https://www.linkedin.com/in/michael-c-jackson01/' },
-        }
-        const m = modals[activeModal]
-        return (
-          <div
-            onClick={() => setActiveModal(null)}
-            style={{
-              position: 'fixed', inset: 0,
-              background: 'rgba(0,0,0,0.6)',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              zIndex: 100,
-            }}
-          >
-            <div
-              onClick={e => e.stopPropagation()}
-              style={{
-                background: theme.cardBg,
-                border: `1px solid ${theme.border}`,
-                borderRadius: '12px',
-                padding: '2rem',
-                maxWidth: '340px',
-                width: '90%',
-                textAlign: 'center',
-              }}
-            >
-              <p style={{ marginBottom: '1.5rem', fontSize: '1rem' }}>Open {m.label} in a new tab?</p>
-              <div style={{ display: 'flex', gap: '0.75rem', justifyContent: 'center' }}>
-                <a
-                  href={m.url}
-                  target="_blank"
-                  rel="noreferrer"
-                  onClick={() => setActiveModal(null)}
-                  style={{
-                    background: theme.accent,
-                    color: '#fff',
-                    padding: '0.5rem 1.25rem',
-                    borderRadius: '6px',
-                    textDecoration: 'none',
-                    fontSize: '0.9rem',
-                  }}
-                >Open {m.label}</a>
-                <button
-                  onClick={() => setActiveModal(null)}
-                  style={{
-                    background: 'none',
-                    border: `1px solid ${theme.border}`,
-                    color: theme.text,
-                    padding: '0.5rem 1.25rem',
-                    borderRadius: '6px',
-                    cursor: 'pointer',
-                    fontSize: '0.9rem',
-                  }}
-                >Cancel</button>
-              </div>
-            </div>
-          </div>
-        )
-      })()}
+      <ExternalLinkModal activeModal={activeModal} setActiveModal={setActiveModal} theme={theme} />
     </>
+  )
+}
+
+const EXTERNAL_LINKS = {
+  github: { label: 'GitHub', url: 'https://github.com/pmmikejackson' },
+  linkedin: { label: 'LinkedIn', url: 'https://www.linkedin.com/in/michael-c-jackson01/' },
+}
+
+function ExternalLinkModal({ activeModal, setActiveModal, theme }) {
+  const dialogRef = useRef(null)
+  const previousFocus = useRef(null)
+
+  useEffect(() => {
+    const dialog = dialogRef.current
+    if (!dialog) return
+    if (activeModal) {
+      previousFocus.current = document.activeElement
+      dialog.showModal()
+    } else {
+      dialog.close()
+      previousFocus.current?.focus()
+    }
+  }, [activeModal])
+
+  const handleClose = useCallback(() => setActiveModal(null), [setActiveModal])
+
+  if (!activeModal) return null
+  const m = EXTERNAL_LINKS[activeModal]
+  if (!m) return null
+
+  return (
+    <dialog
+      ref={dialogRef}
+      onClose={handleClose}
+      onClick={(e) => { if (e.target === e.currentTarget) handleClose() }}
+      style={{
+        background: theme.cardBg,
+        border: `1px solid ${theme.border}`,
+        borderRadius: '12px',
+        padding: '2rem',
+        maxWidth: '340px',
+        width: '90%',
+        textAlign: 'center',
+        color: theme.text,
+      }}
+    >
+      <p style={{ marginBottom: '1.5rem', fontSize: '1rem' }}>Open {m.label} in a new tab?</p>
+      <div style={{ display: 'flex', gap: '0.75rem', justifyContent: 'center' }}>
+        <a
+          href={m.url}
+          target="_blank"
+          rel="noreferrer"
+          onClick={handleClose}
+          style={{
+            background: theme.accent,
+            color: '#fff',
+            padding: '0.5rem 1.25rem',
+            borderRadius: '6px',
+            textDecoration: 'none',
+            fontSize: '0.9rem',
+          }}
+        >Open {m.label}</a>
+        <button
+          onClick={handleClose}
+          style={{
+            background: 'none',
+            border: `1px solid ${theme.border}`,
+            color: theme.text,
+            padding: '0.5rem 1.25rem',
+            borderRadius: '6px',
+            cursor: 'pointer',
+            fontSize: '0.9rem',
+          }}
+        >Cancel</button>
+      </div>
+    </dialog>
   )
 }

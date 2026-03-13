@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { getPosts, getPost, getStrapiMedia } from '../lib/strapi'
+import { containerStyle, categoryBadge } from '../lib/styles'
+import RichText from '../components/RichText'
 
 export default function Blog({ theme }) {
   const { slug } = useParams()
@@ -18,8 +20,6 @@ export default function Blog({ theme }) {
       .catch(err => setError(err.message))
       .finally(() => setLoading(false))
   }, [slug])
-
-  const containerStyle = { maxWidth: '900px', margin: '0 auto', padding: '2rem' }
 
   if (loading) return <div style={containerStyle}><p style={{ color: theme.muted }}>Loading...</p></div>
   if (error) return <div style={containerStyle}><p style={{ color: '#ef4444' }}>Failed to load: {error}</p></div>
@@ -45,30 +45,11 @@ export default function Blog({ theme }) {
             </span>
           )}
           {data.Category && (
-            <span style={{ fontSize: '0.75rem', color: theme.accent, border: `1px solid ${theme.accent}`, padding: '0.15rem 0.5rem', borderRadius: '12px' }}>{data.Category}</span>
+            <span style={categoryBadge(theme.accent)}>{data.Category}</span>
           )}
         </div>
         {imageUrl && <img src={imageUrl} alt={data.Title} style={{ width: '100%', borderRadius: '8px', marginBottom: '2rem', maxHeight: '400px', objectFit: 'cover' }} />}
-        <div style={{ lineHeight: '1.8', fontSize: '1.05rem' }}>
-          {data.Body && data.Body.map((block, i) => {
-            if (block.type === 'paragraph') {
-              return (
-                <p key={i} style={{ marginBottom: '1rem' }}>
-                  {block.children?.map((child, j) => {
-                    if (child.bold) return <strong key={j}>{child.text}</strong>
-                    if (child.italic) return <em key={j}>{child.text}</em>
-                    return <span key={j}>{child.text}</span>
-                  })}
-                </p>
-              )
-            }
-            if (block.type === 'heading') {
-              const Tag = `h${block.level || 2}`
-              return <Tag key={i} style={{ marginTop: '1.5rem', marginBottom: '0.75rem' }}>{block.children?.[0]?.text}</Tag>
-            }
-            return null
-          })}
-        </div>
+        <RichText blocks={data.Body} theme={theme} />
       </div>
     )
   }
@@ -90,7 +71,7 @@ export default function Blog({ theme }) {
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '0.5rem' }}>
                 <h2 style={{ fontSize: '1.2rem', marginBottom: '0.4rem', color: theme.text }}>{post.Title}</h2>
                 {post.Category && (
-                  <span style={{ fontSize: '0.75rem', color: theme.accent, border: `1px solid ${theme.accent}`, padding: '0.15rem 0.5rem', borderRadius: '12px' }}>{post.Category}</span>
+                  <span style={categoryBadge(theme.accent)}>{post.Category}</span>
                 )}
               </div>
               <span style={{ fontSize: '0.8rem', color: theme.muted }}>

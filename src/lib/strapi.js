@@ -1,4 +1,4 @@
-const STRAPI_URL = 'https://cms.themikejackson.com'
+const STRAPI_URL = import.meta.env.VITE_STRAPI_URL || 'https://cms.themikejackson.com'
 
 async function fetchAPI(path) {
   const res = await fetch(`${STRAPI_URL}/api${path}`)
