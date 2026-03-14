@@ -1,4 +1,4 @@
-export const containerStyle = { maxWidth: '900px', margin: '0 auto', padding: '2rem' }
+export const containerStyle = { maxWidth: '1100px', margin: '0 auto', padding: '2rem' }
 
 export const categoryBadge = (accent) => ({
   fontSize: '0.75rem',
@@ -6,6 +6,7 @@ export const categoryBadge = (accent) => ({
   border: `1px solid ${accent}`,
   padding: '0.15rem 0.5rem',
   borderRadius: '12px',
+  fontWeight: 500,
 })
 
 export const linkButtonStyle = (accent) => ({
