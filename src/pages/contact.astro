@@ -1,0 +1,34 @@
+---
+import Base from '../layouts/Base.astro'
+import { SITE } from '../site'
+---
+
+<Base title="Contact" description="Get in touch with Mike Jackson about product leadership and restaurant technology.">
+  <section class="section">
+    <div class="wrap">
+      <p class="eyebrow">Contact</p>
+      <h1>Let's talk</h1>
+      <p class="lede">
+        Whether it's a product leadership role, a restaurant-tech problem, or comparing notes on product management,
+        I'd like to hear from you.
+      </p>
+      <div class="grid-3" style="margin-top:2.5rem">
+        <div class="card">
+          <h3>Email</h3>
+          <p class="muted">The fastest way to reach me.</p>
+          <a class="btn btn-primary" href={`mailto:${SITE.email}`}>{SITE.email}</a>
+        </div>
+        <div class="card">
+          <h3>LinkedIn</h3>
+          <p class="muted">Connect or send a message.</p>
+          <a class="btn btn-ghost" href={SITE.linkedin}>View profile</a>
+        </div>
+        <div class="card">
+          <h3>Resume</h3>
+          <p class="muted">Full professional background (PDF).</p>
+          <a class="btn btn-ghost" href={SITE.resume}>Download</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>

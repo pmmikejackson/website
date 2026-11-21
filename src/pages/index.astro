@@ -1,0 +1,105 @@
+---
+import Base from '../layouts/Base.astro'
+import PostList from '../components/PostList.astro'
+import { SITE, STATS } from '../site'
+import { getPosts } from '../lib/posts'
+
+const latest = (await getPosts()).slice(0, 3)
+
+const expertise = [
+  'Enterprise restaurant technology',
+  'Team development & training',
+  'Operational process improvement',
+  'POS implementation & support',
+  'Digital innovation & prototyping',
+]
+
+const work = [
+  {
+    title: 'Enterprise POS Implementation',
+    text: 'Program-managed the largest single-property MICROS implementation of its era — 300+ workstations with zero-downtime cutovers.',
+  },
+  {
+    title: 'Support Desk Transformation',
+    text: 'Took average speed to answer from 30+ minutes to under 30 seconds and cut mean time to resolve from 5+ weeks to 5 days.',
+  },
+  {
+    title: 'PM Training & Certification',
+    text: 'Built and ran the program that brought 15 product managers to Pragmatic Level IV certification.',
+  },
+]
+---
+
+<Base>
+  <section class="section">
+    <div class="wrap hero">
+      <div>
+        <p class="eyebrow">{SITE.role}</p>
+        <h1>Twenty years of restaurant technology, shipped.</h1>
+        <p class="lede">
+          I'm Mike Jackson. I lead product in restaurant tech — from enterprise-scale POS deployments to building
+          product teams — and I still prototype the ideas myself.
+        </p>
+        <div class="btn-row">
+          <a class="btn btn-primary" href="/work">See my work</a>
+          <a class="btn btn-ghost" href={SITE.resume}>Download resume</a>
+          <a class="btn btn-ghost" href={`mailto:${SITE.email}`}>Email me</a>
+        </div>
+      </div>
+      <img class="hero-photo" src="/images/mike-casual.jpg" alt="Mike Jackson" width="720" height="900" fetchpriority="high" />
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="stats">
+        {STATS.map((s) => <div class="stat"><strong>{s.value}</strong><span>{s.label}</span></div>)}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap grid-2" style="align-items:start">
+      <div>
+        <p class="eyebrow">Approach</p>
+        <h2>Results that matter to teams and to the bottom line</h2>
+        <p>
+          With over two decades in restaurant technology, I've specialized in large-scale implementations, team
+          development, and operational transformations. From managing the largest MICROS deployment of its time to
+          training teams of product managers, I focus on delivering measurable results.
+        </p>
+        <p>
+          My approach combines Pragmatic Institute methodologies with hands-on execution — whether that's reducing
+          support response times by 99%, deploying enterprise systems across 300+ endpoints, or building
+          certification-level training programs.
+        </p>
+        <a href="/about">More about me →</a>
+      </div>
+      <div class="card">
+        <h3>Expertise</h3>
+        <ul class="check-list">{expertise.map((e) => <li>{e}</li>)}</ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <p class="eyebrow">Selected work</p>
+      <h2>Highlights</h2>
+      <div class="grid-3" style="margin-top:1.5rem">
+        {work.map((w) => <div class="card"><h3>{w.title}</h3><p class="muted">{w.text}</p></div>)}
+      </div>
+      <p style="margin-top:1.5rem"><a href="/work">All case studies and prototypes →</a></p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <p class="eyebrow">Insights</p>
+      <h2>Latest writing</h2>
+      <p class="muted" style="margin-bottom:2rem">Restaurant technology, product management, and what 20 years in the field has taught me.</p>
+      <PostList posts={latest} />
+      <p style="margin-top:1.5rem"><a href="/blog">All posts →</a></p>
+    </div>
+  </section>
+</Base>

@@ -1,0 +1,54 @@
+---
+import Base from '../layouts/Base.astro'
+import { SITE, STATS } from '../site'
+
+const principles = ['Outcome over output', 'Market-driven discovery', 'Cross-functional alignment', 'Measurable results']
+---
+
+<Base title="About" description="Mike Jackson is a product manager and technology leader with 20+ years transforming restaurant operations.">
+  <section class="section">
+    <div class="wrap split">
+      <img src="/images/mike-headshot.jpg" alt="Portrait of Mike Jackson" width="720" height="720" />
+      <div>
+        <p class="eyebrow">About</p>
+        <h1>Mike Jackson</h1>
+        <p class="lede">
+          Product manager and technology leader with 20+ years transforming restaurant operations through strategic
+          technology implementations and team development.
+        </p>
+        <p>
+          From managing enterprise-scale POS deployments to training teams of product managers, I focus on delivering
+          measurable results that drive business success. My approach combines Pragmatic Institute methodologies with
+          hands-on execution, whether it's reducing support response times by 99%, deploying systems across 300+
+          endpoints, or developing certification-level training programs.
+        </p>
+        <p>
+          Today I'm Sr. Manager, Product Management at Wingstop, focused on its international markets. On the side, I still prototype tools for real
+          restaurant problems, like dynamic pricing algorithms and tax-compliance scanners.
+        </p>
+        <div class="btn-row" style="margin-top:1.5rem">
+          <a class="btn btn-primary" href={SITE.resume}>Download resume (PDF)</a>
+          <a class="btn btn-ghost" href={SITE.linkedin}>LinkedIn</a>
+          <a class="btn btn-ghost" href={`mailto:${SITE.email}?subject=Opportunity%20discussion`}>Email</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <p class="eyebrow">By the numbers</p>
+      <div class="stats">
+        {STATS.map((s) => <div class="stat"><strong>{s.value}</strong><span>{s.label}</span></div>)}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <p class="eyebrow">How I work</p>
+      <h2>My approach</h2>
+      <ul class="tags" style="margin-top:1.25rem">{principles.map((p) => <li>{p}</li>)}</ul>
+    </div>
+  </section>
+</Base>

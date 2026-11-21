@@ -1,24 +1,34 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+Personal/professional site for Mike Jackson, served at https://www.mikejacksonpm.com (migrated off Wix, Nov 2026).
 
 ## Commands
 
+No Node on the host Mac — run Node through Docker (OrbStack):
+
 ```bash
-npm run dev      # Start dev server with HMR
-npm run build    # Production build to dist/
-npm run preview  # Preview production build locally
-npm run lint     # ESLint check
+docker run --rm -it -v "$PWD":/app -w /app -p 4321:4321 node:22-alpine npm run dev   # dev server on :4321
+docker build -t mjpm-site . && docker run --rm -p 8090:80 mjpm-site                 # production image on :8090
 ```
 
-No test suite is configured.
+`npm run build` outputs static HTML to `dist/`. No test suite.
 
 ## Architecture
 
-This is a single-page personal landing site. All UI lives in [src/App.jsx](src/App.jsx) as one self-contained component — no routing, no additional components, no external UI library.
+Astro static site, no client-side JavaScript.
 
-**Styling approach:** Inline styles only, driven by a `theme` object inside `App`. `index.css` just resets margins/padding/box-sizing. `App.css` is unused. Do not introduce CSS files or CSS-in-JS libraries without good reason.
+- `src/site.ts` — site-wide facts (name, email, links, stats, nav, blog categories). Edit here first.
+- `src/content/blog/*.md` — blog posts ("Insights"). Front matter schema in `src/content.config.ts`. The file name is the URL slug (`/blog/<slug>`). Set `draft: true` to hide a post from production builds. Post images live in `public/images/blog/`.
+- `src/pages/` — one file per page. `src/layouts/Base.astro` holds the header, footer and meta tags.
+- `src/styles/global.css` — all styling; colors are CSS variables on `:root` with a `prefers-color-scheme: dark` override.
 
-**Dark/light mode:** Toggled via `darkMode` useState, defaulting to dark. The `theme` object maps semantic names (`bg`, `text`, `muted`, `accent`, `cardBg`, `border`) to hex values for each mode — extend this object when adding new styled elements.
+Pages build as `about.html`, `blog/<slug>.html` (`build.format: 'file'`); nginx serves them at extensionless URLs.
 
-**Deployment:** Multi-stage Dockerfile builds the Vite output and serves it via nginx on port 80. Hosted on a Synology NAS.
+## nginx.conf
+
+- 301s for old Wix URLs (`/post/*`, `/solutions`, `/blank-1`, `/blog/categories/*`, `/_files/ugd/*`). Keep these.
+- Redirects `themikejackson.com` and bare `mikejacksonpm.com` to `https://www.mikejacksonpm.com`.
+
+## Deployment
+
+Push to `main` → GitHub Actions builds `ghcr.io/pmmikejackson/website:latest` → Watchtower on the Synology NAS pulls it into the `website` container (port 8082) → public traffic arrives through the `cloudflared` tunnel. Pushing to `main` is a production deploy.

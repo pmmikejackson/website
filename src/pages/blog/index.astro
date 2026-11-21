@@ -1,0 +1,22 @@
+---
+import Base from '../../layouts/Base.astro'
+import PostList from '../../components/PostList.astro'
+import { CATEGORIES } from '../../site'
+import { getPosts } from '../../lib/posts'
+
+const posts = await getPosts()
+---
+
+<Base title="Insights" description="Writing on product management, restaurant technology, and leadership.">
+  <section class="section">
+    <div class="wrap">
+      <p class="eyebrow">Insights</p>
+      <h1>Writing</h1>
+      <p class="lede">Product management, restaurant technology, and leadership — from 20+ years of hands-on experience.</p>
+      <ul class="tags" style="margin:1.5rem 0 3rem">
+        {Object.entries(CATEGORIES).map(([slug, label]) => <li style="padding:0;background:none"><a class="tag" href={`/blog/category/${slug}`}>{label}</a></li>)}
+      </ul>
+      <PostList posts={posts} />
+    </div>
+  </section>
+</Base>

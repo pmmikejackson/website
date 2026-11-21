@@ -1,16 +1,10 @@
-# React + Vite
+# mikejacksonpm.com
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Source for https://www.mikejacksonpm.com, Mike Jackson's personal and professional site. It's a static [Astro](https://astro.build) site served by nginx in Docker on a Synology NAS behind a Cloudflare tunnel.
 
-Currently, two official plugins are available:
+- **Blog posts:** add a Markdown file to `src/content/blog/`.
+- **Site facts** (email, links, stats): `src/site.ts`.
+- **Resume:** edit `resume/resume.html`, then run `./resume/build.sh` to regenerate `public/files/mike-jackson-resume.pdf`.
+- **Deploy:** push to `main`. GitHub Actions builds the image, and Watchtower on the NAS picks it up.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+See `CLAUDE.md` for the local dev commands and architecture.

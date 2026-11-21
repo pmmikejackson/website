@@ -1,0 +1,72 @@
+---
+import '../styles/global.css'
+import { SITE, NAV } from '../site'
+
+interface Props {
+  title?: string
+  description?: string
+  image?: string
+  type?: 'website' | 'article'
+}
+
+const { title, description = SITE.description, image = '/images/mike-headshot.jpg', type = 'website' } = Astro.props
+const fullTitle = title ? `${title} | ${SITE.name}` : SITE.title
+const canonical = new URL(Astro.url.pathname, Astro.site)
+const ogImage = new URL(image, Astro.site)
+const path = Astro.url.pathname.replace(/\.html$/, '')
+const isCurrent = (href: string) => path === href || path.startsWith(href + '/')
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="alternate" type="application/rss+xml" title={`${SITE.name} — Insights`} href="/rss.xml" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <meta property="og:type" content={type} />
+    <meta property="og:site_name" content={SITE.name} />
+    <meta property="og:title" content={title ?? SITE.title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <slot name="head" />
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+    <header class="site-header">
+      <div class="wrap">
+        <a class="brand" href="/">{SITE.name}</a>
+        <nav class="nav" aria-label="Main">
+          {NAV.map((item) => (
+            <a href={item.href} aria-current={isCurrent(item.href) ? 'page' : undefined}>{item.label}</a>
+          ))}
+        </nav>
+      </div>
+    </header>
+
+    <main id="main">
+      <slot />
+    </main>
+
+    <footer class="site-footer">
+      <div class="wrap">
+        <div>
+          <div>© {new Date().getFullYear()} {SITE.name} · {SITE.location}</div>
+          <div><a href={`mailto:${SITE.email}`}>{SITE.email}</a></div>
+        </div>
+        <nav aria-label="Footer">
+          <a href={SITE.linkedin} rel="me">LinkedIn</a>
+          <a href={SITE.github} rel="me">GitHub</a>
+          <a href="/rss.xml">RSS</a>
+          <a href="/privacy-policy">Privacy</a>
+        </nav>
+      </div>
+    </footer>
+  </body>
+</html>

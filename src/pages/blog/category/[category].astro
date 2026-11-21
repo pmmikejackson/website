@@ -1,0 +1,29 @@
+---
+import Base from '../../../layouts/Base.astro'
+import PostList from '../../../components/PostList.astro'
+import { CATEGORIES } from '../../../site'
+import { getPosts } from '../../../lib/posts'
+
+export async function getStaticPaths() {
+  const posts = await getPosts()
+  return Object.keys(CATEGORIES).map((category) => ({
+    params: { category },
+    props: { posts: posts.filter((p) => p.data.categories.includes(category)) },
+  }))
+}
+
+const { category } = Astro.params
+const { posts } = Astro.props
+const label = CATEGORIES[category]
+---
+
+<Base title={`${label} — Insights`} description={`Posts about ${label.toLowerCase()} by Mike Jackson.`}>
+  <section class="section">
+    <div class="wrap">
+      <p class="eyebrow"><a href="/blog" style="text-decoration:none">Insights</a></p>
+      <h1>{label}</h1>
+      <p class="muted" style="margin-bottom:2.5rem">{posts.length} {posts.length === 1 ? 'post' : 'posts'}</p>
+      <PostList posts={posts} />
+    </div>
+  </section>
+</Base>

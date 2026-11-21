@@ -1,0 +1,33 @@
+---
+import Base from '../layouts/Base.astro'
+import { SITE } from '../site'
+---
+
+<Base title="Privacy Policy">
+  <section class="section">
+    <div class="prose-wrap">
+      <p class="eyebrow">Privacy</p>
+      <h1>Privacy Policy</h1>
+      <p class="muted">Last updated: November 2026</p>
+      <p>This site is a static website that I host myself. It is built to collect as little as possible.</p>
+      <h2>What this site does not do</h2>
+      <ul>
+        <li>No cookies.</li>
+        <li>No analytics or tracking scripts, and no third-party advertising.</li>
+        <li>No forms. Nothing you type here is sent anywhere.</li>
+      </ul>
+      <h2>Server logs</h2>
+      <p>
+        Like any web server, the server that delivers these pages may briefly record standard request information
+        (IP address, browser type, and the page requested) for security and troubleshooting. These logs are not
+        shared or sold.
+      </p>
+      <h2>Email</h2>
+      <p>
+        If you email me, I'll use your address and message only to reply. I don't add anyone to a mailing list.
+      </p>
+      <h2>Questions</h2>
+      <p>Email <a href={`mailto:${SITE.email}`}>{SITE.email}</a>.</p>
+    </div>
+  </section>
+</Base>

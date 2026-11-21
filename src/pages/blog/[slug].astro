@@ -1,0 +1,49 @@
+---
+import { render } from 'astro:content'
+import Base from '../../layouts/Base.astro'
+import { CATEGORIES, SITE, formatDate } from '../../site'
+import { getPosts } from '../../lib/posts'
+
+export async function getStaticPaths() {
+  const posts = await getPosts()
+  return posts.map((post) => ({ params: { slug: post.id }, props: { post } }))
+}
+
+const { post } = Astro.props
+const { Content } = await render(post)
+const { title, description, pubDate, updatedDate, categories, heroImage } = post.data
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: title,
+  description,
+  datePublished: pubDate.toISOString(),
+  dateModified: (updatedDate ?? pubDate).toISOString(),
+  author: { '@type': 'Person', name: SITE.name, url: Astro.site?.href },
+  image: heroImage ? new URL(heroImage, Astro.site).href : undefined,
+  mainEntityOfPage: new URL(Astro.url.pathname, Astro.site).href,
+}
+---
+
+<Base title={title} description={description} image={heroImage} type="article">
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  <article>
+    <header class="article-header prose-wrap">
+      <p class="eyebrow"><a href="/blog" style="text-decoration:none">Insights</a></p>
+      <h1>{title}</h1>
+      <div class="post-meta">
+        By {SITE.name} · <time datetime={pubDate.toISOString()}>{formatDate(pubDate)}</time>
+      </div>
+    </header>
+    <div class="prose prose-wrap">
+      <Content />
+    </div>
+    <footer class="post-footer prose-wrap">
+      <ul class="tags">
+        {categories.map((c) => <li style="padding:0;background:none"><a class="tag" href={`/blog/category/${c}`}>{CATEGORIES[c] ?? c}</a></li>)}
+      </ul>
+      <a href="/blog">← All posts</a>
+    </footer>
+  </article>
+</Base>
