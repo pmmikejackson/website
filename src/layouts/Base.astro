@@ -11,9 +11,10 @@ interface Props {
 
 const { title, description = SITE.description, image = '/images/mike-headshot.jpg', type = 'website' } = Astro.props
 const fullTitle = title ? `${title} | ${SITE.name}` : SITE.title
-const canonical = new URL(Astro.url.pathname, Astro.site)
+// Pages build as <name>.html; share and canonical URLs should not carry the extension
+const path = Astro.url.pathname.replace(/(\/index)?\.html$/, '') || '/'
+const canonical = new URL(path, Astro.site)
 const ogImage = new URL(image, Astro.site)
-const path = Astro.url.pathname.replace(/\.html$/, '')
 const isCurrent = (href: string) => path === href || path.startsWith(href + '/')
 ---
 
