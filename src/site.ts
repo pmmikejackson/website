@@ -10,6 +10,7 @@ export const SITE = {
   github: 'https://github.com/pmmikejackson',
   resume: '/files/mike-jackson-resume.pdf',
   location: 'Rockwall, Texas',
+  bio: 'Product leader with 20+ years in restaurant technology, writing about how product work is changing with AI.',
 }
 
 export const NAV = [

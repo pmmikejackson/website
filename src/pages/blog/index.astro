@@ -4,7 +4,7 @@ import PostList from '../../components/PostList.astro'
 import { CATEGORIES } from '../../site'
 import { getPosts } from '../../lib/posts'
 
-const posts = await getPosts()
+const [latest, ...rest] = await getPosts()
 ---
 
 <Base title="Insights" description="Writing on product management, restaurant technology, and leadership.">
@@ -16,7 +16,8 @@ const posts = await getPosts()
       <ul class="tags" style="margin:1.5rem 0 3rem">
         {Object.entries(CATEGORIES).map(([slug, label]) => <li style="padding:0;background:none"><a class="tag" href={`/blog/category/${slug}`}>{label}</a></li>)}
       </ul>
-      <PostList posts={posts} />
+      {latest && <PostList posts={[latest]} featured />}
+      <PostList posts={rest} />
     </div>
   </section>
 </Base>

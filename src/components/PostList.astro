@@ -1,22 +1,26 @@
 ---
 import type { CollectionEntry } from 'astro:content'
 import { CATEGORIES, formatDate } from '../site'
+import { readingTime } from '../lib/posts'
 
-interface Props { posts: CollectionEntry<'blog'>[] }
-const { posts } = Astro.props
+interface Props { posts: CollectionEntry<'blog'>[]; featured?: boolean }
+const { posts, featured = false } = Astro.props
+const label = (c: string) => CATEGORIES[c] ?? c
 ---
 
-<ul class="post-list">
+<ul class:list={['post-list', { 'post-list--featured': featured }]}>
   {posts.map((post) => (
     <li class="post-item">
       {post.data.heroImage
-        ? <a href={`/blog/${post.id}`} tabindex="-1" aria-hidden="true"><img src={post.data.heroImage} alt="" loading="lazy" width="352" height="264" /></a>
+        ? <a href={`/blog/${post.id}`} tabindex="-1" aria-hidden="true"><img src={post.data.heroImage} alt="" loading={featured ? 'eager' : 'lazy'} width={featured ? 1200 : 352} height={featured ? 630 : 264} /></a>
         : <span />}
       <div>
+        {featured && <p class="eyebrow">Latest</p>}
         <h3><a href={`/blog/${post.id}`}>{post.data.title}</a></h3>
         <div class="post-meta">
           <time datetime={post.data.pubDate.toISOString()}>{formatDate(post.data.pubDate)}</time>
-          {post.data.categories.length > 0 && <> · {post.data.categories.map((c) => CATEGORIES[c] ?? c).join(', ')}</>}
+          {' · '}{readingTime(post.body)} min read
+          {post.data.categories.length > 0 && <> · {post.data.categories.map(label).join(', ')}</>}
         </div>
         <p class="muted">{post.data.description}</p>
       </div>
