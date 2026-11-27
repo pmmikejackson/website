@@ -15,12 +15,12 @@ docker build -t mjpm-site . && docker run --rm -p 8090:80 mjpm-site             
 
 ## Architecture
 
-Astro static site, no client-side JavaScript.
+Astro static site. The only client-side JavaScript is two small inline scripts in `Base.astro` for the light/dark switch.
 
 - `src/site.ts` — site-wide facts (name, email, links, stats, nav, blog categories). Edit here first.
 - `src/content/blog/*.md` — blog posts ("Insights"). Front matter schema in `src/content.config.ts`. The file name is the URL slug (`/blog/<slug>`). Set `draft: true` to hide a post from production builds. Post images live in `public/images/blog/`.
 - `src/pages/` — one file per page. `src/layouts/Base.astro` holds the header, footer and meta tags.
-- `src/styles/global.css` — all styling; colors are CSS variables on `:root` with a `prefers-color-scheme: dark` override.
+- `src/styles/global.css` — all styling; colors are CSS variables on `:root`; dark values apply under `prefers-color-scheme: dark` unless the visitor picked a theme, which sets `data-theme` on `<html>` (saved in localStorage).
 
 Pages build as `about.html`, `blog/<slug>.html` (`build.format: 'file'`); nginx serves them at extensionless URLs.
 
