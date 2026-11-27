@@ -4,13 +4,13 @@ export const SITE = {
   title: 'Mike Jackson — Product Leader',
   role: 'Product Manager & Technology Leader',
   description:
-    'Product manager and technology leader with 20+ years transforming restaurant operations through enterprise-scale deployments, team development, and hands-on prototyping.',
+    'Product manager and technology leader with 15+ years transforming restaurant operations through enterprise-scale deployments, team development, and hands-on prototyping.',
   email: 'mike@mikejacksonpm.com',
   linkedin: 'https://www.linkedin.com/in/michael-c-jackson01/',
   github: 'https://github.com/pmmikejackson',
   resume: '/files/mike-jackson-resume.pdf',
   location: 'Rockwall, Texas',
-  bio: 'Product leader with 20+ years in restaurant technology, writing about how product work is changing with AI.',
+  bio: 'Product manager with 15+ years in restaurant tech, writing about what changes in product work now that AI is in the room.',
 }
 
 export const NAV = [
@@ -27,7 +27,7 @@ export const CATEGORIES: Record<string, string> = {
 }
 
 export const STATS = [
-  { value: '20+', label: 'Years in restaurant technology' },
+  { value: '15+', label: 'Years in restaurant technology' },
   { value: '20,000+', label: 'Production deployments managed' },
   { value: '99%', label: 'Support center improvement' },
   { value: '15', label: 'PMs trained to Pragmatic Level IV' },
